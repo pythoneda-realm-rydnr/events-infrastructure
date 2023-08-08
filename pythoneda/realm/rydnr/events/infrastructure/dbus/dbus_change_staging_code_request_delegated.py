@@ -1,7 +1,7 @@
 """
-pythoneda/realm/rydnr/events/infrastructure/dbus/dbus_staged_changes_commit_request_delegated.py
+pythoneda/realm/rydnr/events/infrastructure/dbus/dbus_change_staging_code_request_delegated.py
 
-This file declares DbusStagedChangesCommitRequestDelegated.
+This file declares DbusChangeStagingCodeRequestDelegated.
 
 Copyright (C) 2023-today rydnr's pythoneda-realm-rydnr/events-infrastructure
 
@@ -21,19 +21,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from dbus_next import Message
 from dbus_next.service import ServiceInterface, signal
 import json
-from pythoneda.shared.artifact_changes.change import Change
-from pythoneda.shared.artifact_changes.events.staged_changes_commit_requested import StagedChangesCommitRequested
+from pythoneda.realm.rydnr.events import ChangeStagingCodeRequestDelegated
+from pythoneda.shared.artifact_changes import Change
 from pythoneda.shared.artifact_changes.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
-class DbusStagedChangesCommitRequestDelegated(ServiceInterface):
+class DbusChangeStagingCodeRequestDelegated(ServiceInterface):
     """
-    D-Bus interface for StagedChangesCommitRequestDelegated
+    D-Bus interface for ChangeStagingCodeRequestDelegated
 
-    Class name: DbusStagedChangesCommitRequestDelegated
+    Class name: DbusChangeStagingCodeRequestDelegated
 
     Responsibilities:
-        - Define the d-bus interface for the StagedChangesCommitRequestDelegated event.
+        - Define the d-bus interface for the ChangeStagingCodeRequestDelegated event.
 
     Collaborators:
         - None
@@ -41,14 +41,14 @@ class DbusStagedChangesCommitRequestDelegated(ServiceInterface):
 
     def __init__(self):
         """
-        Creates a new DbusStagedChangesCommitRequestDelegated.
+        Creates a new DbusChangeStagingCodeRequestDelegated.
         """
-        super().__init__("pythonedaartifactchanges_StagedChangesCommitRequestDelegated")
+        super().__init__("pythoneda_realm_rydnr_events_ChangeStagingCodeRequestDelegated")
 
     @signal()
-    def StagedChangesCommitRequestDelegated(self, change: "s"):
+    def ChangeStagingCodeRequestDelegated(self, change: "s"):
         """
-        Defines the StagedChangesCommitRequestDelegated d-bus signal.
+        Defines the ChangeStagingCodeRequestDelegated d-bus signal.
         :param change: The change.
         :type change: str
         """
@@ -64,41 +64,41 @@ class DbusStagedChangesCommitRequestDelegated(ServiceInterface):
         return DBUS_PATH
 
     @classmethod
-    def transform_StagedChangesCommitRequestDelegated(
-        self, event: StagedChangesCommitRequestDelegated
+    def transform(
+        self, event: ChangeStagingCodeRequestDelegated
     ) -> List[str]:
         """
         Transforms given event to signal parameters.
         :param event: The event to transform.
-        :type event: pythonedaartifacteventchanges.staged_changes_commit_request_delegated.StagedChangesCommitRequestDelegated
+        :type event: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
         :return: The event information.
         :rtype: List[str]
         """
         return [event.message, event.repository_url, event.branch, event.repository_folder, event.id, json.dumps(event.previous_event_ids)]
 
     @classmethod
-    def signature_for_StagedChangesCommitRequestDelegated(cls, event: StagedChangesCommitRequestDelegated) -> str:
+    def sign(cls, event: ChangeStagingCodeRequestDelegated) -> str:
         """
         Retrieves the signature for the parameters of given event.
         :param event: The domain event.
-        :type event: pythonedaartifacteventchanges.staged_changes_commit_request_delegated.StagedChangesCommitRequestDelegated
+        :type event: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
         :return: The signature.
         :rtype: str
         """
         return "ssssss"
 
     @classmethod
-    def parse_pythonedaartifactchanges_StagedChangesCommitRequestDelegated(
+    def parse(
         cls, message: Message
-    ) -> StagedChangesCommitRequestDelegated:
+    ) -> ChangeStagingCodeRequestDelegated:
         """
-        Parses given d-bus message containing a StagedChangesCommitRequestDelegated event.
+        Parses given d-bus message containing a ChangeStagingCodeRequestDelegated event.
         :param message: The message.
         :type message: dbus_next.Message
-        :return: The StagedChangesCommitRequested event.
-        :rtype: pythonedaartifacteventchanges.staged_changes_commit_request_delegated.StagedChangesCommitRequestDelegated
+        :return: The ChangeStagingCodeRequestDelegated event.
+        :rtype: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
         """
         msg, repository_url, branch, repository_folder, event_id, prev_event_ids = message.body
-        return StagedChangesCommitRequested(
+        return ChangeStagingCodeRequestDelegated(
             msg, repository_url, branch, repository_folder, None, event_id, json.loads(prev_event_ids)
         )
