@@ -23,7 +23,6 @@ from dbus_next.service import ServiceInterface, signal
 import json
 from pythoneda import BaseObject
 from pythoneda.realm.rydnr.events import ChangeStagingCodeRequestDelegated
-from pythoneda.shared.artifact_changes import Change
 from pythoneda.shared.artifact_changes.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
