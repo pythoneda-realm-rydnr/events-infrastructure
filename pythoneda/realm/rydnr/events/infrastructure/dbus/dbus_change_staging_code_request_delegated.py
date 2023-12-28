@@ -26,6 +26,7 @@ from pythoneda.realm.rydnr.events import ChangeStagingCodeRequestDelegated
 from pythoneda.shared.artifact_changes.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
+
 class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
     """
     D-Bus interface for ChangeStagingCodeRequestDelegated
@@ -65,23 +66,30 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
 
     @classmethod
     def transform(
-        self, event: ChangeStagingCodeRequestDelegated
+        cls, event: ChangeStagingCodeRequestDelegated
     ) -> List[str]:
         """
         Transforms given event to signal parameters.
         :param event: The event to transform.
-        :type event: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
+        :type event: pythoneda.realm.rydnr.events.ChangeStagingCodeRequestDelegated
         :return: The event information.
         :rtype: List[str]
         """
-        return [event.message, event.repository_url, event.branch, event.repository_folder, event.id, json.dumps(event.previous_event_ids)]
+        return [
+            event.message,
+            event.repository_url,
+            event.branch,
+            event.repository_folder,
+            event.id,
+            json.dumps(event.previous_event_ids)
+        ]
 
     @classmethod
     def sign(cls, event: ChangeStagingCodeRequestDelegated) -> str:
         """
         Retrieves the signature for the parameters of given event.
         :param event: The domain event.
-        :type event: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
+        :type event: pythoneda.realm.rydnr.events.ChangeStagingCodeRequestDelegated
         :return: The signature.
         :rtype: str
         """
@@ -96,7 +104,7 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
         :param message: The message.
         :type message: dbus_next.Message
         :return: The ChangeStagingCodeRequestDelegated event.
-        :rtype: pythoneda.realm.rydnr.events.change_staging_code_request_delegated.ChangeStagingCodeRequestDelegated
+        :rtype: pythoneda.realm.rydnr.events.ChangeStagingCodeRequestDelegated
         """
         msg, repository_url, branch, repository_folder, event_id, prev_event_ids = message.body
         return ChangeStagingCodeRequestDelegated(
