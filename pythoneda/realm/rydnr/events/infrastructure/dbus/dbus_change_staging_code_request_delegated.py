@@ -1,3 +1,4 @@
+# vim: set fileencoding=utf-8
 """
 pythoneda/realm/rydnr/events/infrastructure/dbus/dbus_change_staging_code_request_delegated.py
 
@@ -21,8 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from dbus_next import Message
 from dbus_next.service import ServiceInterface, signal
 import json
-from pythoneda import BaseObject
 from pythoneda.realm.rydnr.events import ChangeStagingCodeRequestDelegated
+from pythoneda.shared import BaseObject
 from pythoneda.shared.artifact_changes.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
@@ -44,7 +45,9 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
         """
         Creates a new DbusChangeStagingCodeRequestDelegated.
         """
-        super().__init__("pythoneda_realm_rydnr_events_ChangeStagingCodeRequestDelegated")
+        super().__init__(
+            "pythoneda_realm_rydnr_events_ChangeStagingCodeRequestDelegated"
+        )
 
     @signal()
     def ChangeStagingCodeRequestDelegated(self, change: "s"):
@@ -65,9 +68,7 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
         return DBUS_PATH
 
     @classmethod
-    def transform(
-        cls, event: ChangeStagingCodeRequestDelegated
-    ) -> List[str]:
+    def transform(cls, event: ChangeStagingCodeRequestDelegated) -> List[str]:
         """
         Transforms given event to signal parameters.
         :param event: The event to transform.
@@ -81,7 +82,7 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
             event.branch,
             event.repository_folder,
             event.id,
-            json.dumps(event.previous_event_ids)
+            json.dumps(event.previous_event_ids),
         ]
 
     @classmethod
@@ -96,9 +97,7 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
         return "ssssss"
 
     @classmethod
-    def parse(
-        cls, message: Message
-    ) -> ChangeStagingCodeRequestDelegated:
+    def parse(cls, message: Message) -> ChangeStagingCodeRequestDelegated:
         """
         Parses given d-bus message containing a ChangeStagingCodeRequestDelegated event.
         :param message: The message.
@@ -106,7 +105,20 @@ class DbusChangeStagingCodeRequestDelegated(BaseObject, ServiceInterface):
         :return: The ChangeStagingCodeRequestDelegated event.
         :rtype: pythoneda.realm.rydnr.events.ChangeStagingCodeRequestDelegated
         """
-        msg, repository_url, branch, repository_folder, event_id, prev_event_ids = message.body
+        (
+            msg,
+            repository_url,
+            branch,
+            repository_folder,
+            event_id,
+            prev_event_ids,
+        ) = message.body
         return ChangeStagingCodeRequestDelegated(
-            msg, repository_url, branch, repository_folder, None, event_id, json.loads(prev_event_ids)
+            msg,
+            repository_url,
+            branch,
+            repository_folder,
+            None,
+            event_id,
+            json.loads(prev_event_ids),
         )
